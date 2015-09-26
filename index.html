@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>LED RGB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/jquery.ui.all.css">
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.min.js"></script>
+  </head>
+  <body>
+
+    <div class="container">
+	<script>
+	function hexFromRGB(r, g, b) {
+		var hex = [
+			r.toString( 16 ),
+			g.toString( 16 ),
+			b.toString( 16 )
+		];
+		$.each( hex, function( nr, val ) {
+			if ( val.length === 1 ) {
+				hex[ nr ] = "0" + val;
+			}
+		});
+		return hex.join( "" ).toUpperCase();
+	}
+	
+	function refreshSwatch() {
+		var red = $( "#red" ).slider( "value" ),
+			green = $( "#green" ).slider( "value" ),
+			blue = $( "#blue" ).slider( "value" ),
+			hex = hexFromRGB( red, green, blue );
+	    	$( "#swatch" ).css( "background-color", "#" + hex );
+			$color_hex=$( "#swatch" ).css( "background-color", "#" + hex );
+			
+            $("#ver_hex").html("#"+hex);
+			$("#ver_hex").css({
+				"color":"#000000",
+				"font-weight":"bold"
+				});
+	}
+	
+	$(function() {$( "#red" ).slider({
+			orientation: "horizontal",
+			range: "min",
+			max: 255,
+			value: 255,
+			slide: refreshSwatch,
+			change: refreshSwatch,
+			slide: function( event, ui ) {
+			$( "#ver_red" ).val( ui.value );
+			var valuer = $( "#red" ).slider( "option", "value" );		
+            console.log("Red: "+valuer);		
+			$.post("procesa.php",{ val_rojo: valuer}, function(data){
+		    	})
+			}
+		});
+		$( "#red" ).slider( "value", 0 );
+        $( "#ver_red" ).val( $( "#red" ).slider( "value" ) );	
+	});
+
+	$(function() {
+		$( "#green" ).slider({
+			orientation: "horizontal",
+			range: "min",
+			max: 255,
+			value: 0,
+			slide: refreshSwatch,
+			change: refreshSwatch,
+			slide: function( event, ui ) {
+			$( "#ver_green" ).val( ui.value );
+            var valueg = $( "#green" ).slider( "option", "value" );							
+            console.log("green: "+valueg);	
+			$.post("procesa.php",{ val_verde:valueg}, function(data){
+		    	})
+			}
+		});
+		
+		$( "#green" ).slider( "value", 0 );
+        $( "#ver_green" ).val( $( "#green" ).slider( "value" ) );								
+		
+	});
+
+	$(function() {
+		$( "#blue" ).slider({
+			orientation: "horizontal",
+			range: "min",
+			max: 255,
+			value: 0,
+			slide: refreshSwatch,
+			change: refreshSwatch,
+			slide: function( event, ui ) {
+			$( "#ver_blue" ).val( ui.value );
+			var valuea = $( "#blue" ).slider( "option", "value" );		
+			console.log("blue: "+valuea);	
+			$.post("procesa.php",{ val_azul:valuea }, function(data){
+		    	})
+			}
+	
+		});
+		
+	  $( "#blue" ).slider( "value", 0 );
+      $( "#ver_blue" ).val( $( "#blue" ).slider( "value" ) );			
+		
+	});
+
+	</script>
+
+<div class="demo">
+<h2 align="center">Control de un led RGB a través de Internet con Raspberry Pi, Arduino y Processing</h2>
+<p align="center" class="ui-state-default ui-corner-all ui-helper-clearfix" style="padding:4px;">
+  	RGB
+</p>
+<br>
+<table align="center" class="contenedor" border="0">
+<tr>
+ <td width="348">
+   <div id="red"></div>
+ </td>   
+ <td width="136">
+  <label>Valor:</label>
+  <input type="text" id="ver_red" width="10" style="border:0; color:#f6931f; font-weight:bold;" readonly />
+ </td>
+ <td width="205" rowspan="2" align="left"> <div id="swatch"></div></td>
+ </tr>
+<tr>
+  <td><div id="green"></div></td>
+  <td> 
+    <label>Valor:</label>
+    <input type="text" id="ver_green" width="10" style="border:0; color:#f6931f; font-weight:bold;" readonly />
+  </td>
+ </tr>
+<tr>
+ <td><div id="blue"></div></td>
+ <td> 
+   <label>Valor:</label>
+   <input type="text" id="ver_blue" width="10" style="border:0; color:#f6931f; font-weight:bold;" readonly />
+ </td>
+ <td  align="left"><div id="ver_hex"></div></td>
+ </tr>
+</table>
+</div>
+
+</body>
+</html>
